@@ -17,11 +17,10 @@ Flask API for recorgnize image using Deep Learning model
     export FLASK_APP=main.py
     export FLASK_ENV=development
     flask run
-<br>
 It will be run at http://127.0.0.1:5000/
 
-### 4. Testing servee
-Open another terminal in project folder then do following steps
+### 4. Testing serve
+Open another terminal in project folder then do following steps<br>
     . venv/bin/activate
     cd test/
     python test.py
