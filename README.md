@@ -25,5 +25,6 @@ Open another terminal in project folder then do following steps
     . venv/bin/activate
     cd test/
     python test.py
+The response result should be in JSON format
 
 ### End
