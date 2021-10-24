@@ -2,6 +2,7 @@
 Flask API for recorgnize image using Deep Learning model
 
 ## Step by step to deploy
+Just deploy this project on Linux OS
 
 ### 1. Clone from git
     git clone https://github.com/hoangviet99/flask-plant-list-project.git
