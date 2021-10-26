@@ -12,7 +12,11 @@ from torchvision.transforms.transforms import Resize
 
 # 1. Load model
 
-MODEL_PATH = './model/model_5_plant_leaf.pth'
+MODEL_PATH_LEAF = './model/model_5_plant_leaf.pth'
+MODEL_PATH_FLOWER = './model/model_5_plant_flower.pth'
+MODEL_PATH_FRUIT = './model/model_5_plant_fruit.pth'
+MODEL_PATH_OVERALL = './model/model_5_plant_overall.pth'
+
 out_features = 5
 
 def accuracy(out, labels):
@@ -65,9 +69,6 @@ class ResNet(ImageClassificationBase):
             param.require_grad=True
 
 model = ResNet()
-checkpoint = torch.load(MODEL_PATH)
-model.load_state_dict(checkpoint)
-model.eval()
 
 # 2. Img to tensor
 
@@ -85,7 +86,19 @@ def transform_image(image_bytes):
 
 # 3. Get Prediction Image
 
-def get_prediction(input_batch):
+def get_prediction(input_batch, type_predict):
+    if type_predict == 'leaf':
+        checkpoint = torch.load(MODEL_PATH_LEAF)
+    if type_predict == 'flower':
+        checkpoint = torch.load(MODEL_PATH_FLOWER)
+    if type_predict == 'fruit':
+        checkpoint = torch.load(MODEL_PATH_FRUIT)
+    if type_predict == 'overall':
+        checkpoint = torch.load(MODEL_PATH_OVERALL)
+
+    model.load_state_dict(checkpoint)
+    model.eval()
+
     with torch.no_grad():
         output = model(input_batch)
 
