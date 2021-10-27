@@ -13,7 +13,7 @@ from torchvision.transforms.transforms import Resize
 # 1. Load model
 
 MODEL_PATH_LEAF = './model/model_5_plant_leaf.pth'
-MODEL_PATH_FLOWER = './model/model_5_plant_flower.pth'
+MODEL_PATH_FLOWER = './model/model_4_plant_flower.pth'
 MODEL_PATH_FRUIT = './model/model_5_plant_fruit.pth'
 MODEL_PATH_OVERALL = './model/model_5_plant_overall.pth'
 
@@ -49,11 +49,11 @@ class ImageClassificationBase(nn.Module):
         epoch+1, epochs, result["lrs"][-1], result["train_loss"], result["val_loss"], result["val_acc"]))
 
 class ResNet(ImageClassificationBase):
-    def __init__(self):
+    def __init__(self, num_classes):
         super().__init__()
         self.network = models.resnet18(pretrained=True)
         number_of_features = self.network.fc.in_features
-        self.network.fc = nn.Linear(number_of_features, out_features)
+        self.network.fc = nn.Linear(number_of_features, num_classes)
         
     def forward(self, xb):
         return self.network(xb)
@@ -67,8 +67,6 @@ class ResNet(ImageClassificationBase):
     def unfreeze(self):
         for param in self.network.parameters():
             param.require_grad=True
-
-model = ResNet()
 
 # 2. Img to tensor
 
@@ -88,12 +86,20 @@ def transform_image(image_bytes):
 
 def get_prediction(input_batch, type_predict):
     if type_predict == 'leaf':
+        set_num_classes(5)
+        model = ResNet(5)
         checkpoint = torch.load(MODEL_PATH_LEAF)
     if type_predict == 'flower':
+        set_num_classes(4)
+        model = ResNet(4)
         checkpoint = torch.load(MODEL_PATH_FLOWER)
     if type_predict == 'fruit':
+        set_num_classes(5)
+        model = ResNet(5)
         checkpoint = torch.load(MODEL_PATH_FRUIT)
     if type_predict == 'overall':
+        set_num_classes(5)
+        model = ResNet(5)
         checkpoint = torch.load(MODEL_PATH_OVERALL)
 
     model.load_state_dict(checkpoint)
@@ -112,3 +118,6 @@ def get_prediction(input_batch, type_predict):
     result = [best_accuracy, prediction]
 
     return result
+
+def set_num_classes(num):
+    out_features = num
